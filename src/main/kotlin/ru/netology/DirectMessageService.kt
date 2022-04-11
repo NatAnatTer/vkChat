@@ -3,7 +3,7 @@ package ru.netology
 object DirectMessageService {
     private val directMessages = mutableListOf<DirectMessage>()
 
-    fun addDirectMessage(owner: People, user: People): Boolean {
+    fun addDirectMessages(owner: People, user: People): Boolean {
         for (chat in directMessages) {
             if (chat.owner == owner && chat.user == user && !chat.isDelete) {
                 println("Чат открыт")
@@ -17,9 +17,20 @@ object DirectMessageService {
         val newId = (directMessages.lastOrNull()?.idChat ?: 0U) + 1U
         val directMessageAdding = DirectMessage(newId, owner, user, null, false)
         directMessages += directMessageAdding
+        println("Чат создан")
         return true
-
     }
+
+    fun deleteDirectMessages(owner: People, user: People) {
+        for (chat in directMessages) {
+            if (chat.owner == owner && chat.user == user && !chat.isDelete) {
+                chat.isDelete = true
+                println("Чат удален")
+            }
+
+        }
+    }
+}
 
 //    fun addMessage(message: Message, directMessage: DirectMessage): Boolean {
 //        if (directMessage.idChat == 0U) {
@@ -45,4 +56,3 @@ object DirectMessageService {
 //    }
 
 
-}
