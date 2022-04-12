@@ -33,7 +33,7 @@ fun openDirectMessage(persons: MutableSet<People>, owner: People) {
         val companion = readLine()
         for (user in persons) {
             if (user.name == companion) {
-                DirectMessageService.addDirectMessages(owner, user)
+              //  DirectMessageService.addDirectMessages(owner, user)
                 return
             }
         }
