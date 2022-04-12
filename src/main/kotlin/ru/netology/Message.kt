@@ -6,5 +6,5 @@ data class Message(
     val text: String,
     val dateCreate: Long,
     var isDelete: Boolean, //true - delete, false - is active
-    val targetPeopleIsRead: Boolean,
+    var targetPeopleIsRead: Boolean,
 )
