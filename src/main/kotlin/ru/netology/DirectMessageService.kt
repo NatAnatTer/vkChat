@@ -28,7 +28,7 @@ object DirectMessageService {
         return true
     }
 
-    fun createMessage(text: String, directMessage: DirectMessage, targetPeople: People) {
+    private fun createMessage(text: String, directMessage: DirectMessage, targetPeople: People) {
         val idMessage = (directMessage.message?.lastOrNull()?.idMessage ?: 0U) + 1U
         val message = Message(
             idMessage,
@@ -89,6 +89,31 @@ object DirectMessageService {
         return countChat
     }
 
+    //#################################
+    fun getUnreadChatsCountExperiment(owner: People): UInt {
+val directMessage: DirectMessage
+        var countChat: UInt =0U
+            //var countChat: Int = directMessages.count(; ->(directMessage.user1 == owner && !chat.isDelete) || (chat.user2 == owner && !chat.isDelete)))
+
+
+
+        for (chat in directMessages) {
+            if ((chat.user1 == owner && !chat.isDelete) || (chat.user2 == owner && !chat.isDelete)) {
+                var flag = false
+                for (message in chat.message!!) {
+                    if (message.targetPeople == owner && !message.targetPeopleIsRead) {
+                        flag = true
+                    }
+                }
+                if (flag) {
+                    countChat += 1U
+                }
+            }
+        }
+        return countChat
+    }
+    //####################################
+
     fun editMessage(owner: People, user: People, editedMessage: Message): Boolean {
         for (chat in directMessages) {
             if ((chat.user1 == owner && chat.user2 == user && !chat.isDelete) ||
@@ -112,6 +137,7 @@ object DirectMessageService {
             if ((chat.user1 == owner && chat.user2 == user && !chat.isDelete) ||
                 (chat.user2 == owner && chat.user1 == user && !chat.isDelete)
             ) {
+               // if(chat.message?.withIndex().contains(deletedMessage) == true){
                 for (message in chat.message!!) {
                     if (message.idMessage == deletedMessage.idMessage && !message.isDelete) {
                         message.isDelete = true
@@ -146,7 +172,43 @@ object DirectMessageService {
         return resultList
     }
 
+//######################
+    fun getMessagesExperiment(idChat: UInt, idMessageStart: UInt, numberOfMessages: Int, owner: People): MutableList<Message> {
+        val resultList = mutableListOf<Message>()
+        for (chat in directMessages) {
+            if (chat.idChat == idChat && !chat.isDelete) {
+
+                var numberMessage = numberOfMessages
+                for (message in chat.message!!) {
+                    if (message.idMessage >= idMessageStart && !message.isDelete && numberMessage > 0) {
+                        if (message.targetPeople == owner){
+                            message.targetPeopleIsRead = true
+                        }
+                        resultList.add(message)
+                        numberMessage -= 1
+                    }
+                }
+            }
+        }
+        return resultList
+    }
+
+
+//    val cats = listOf("Мурзик", "Барсик", "Рыжик")
+//    println(cats.get(2))
+//    Но у этих способов есть один недостаток - если вы укажете неправильное значение индекса, то получите исключение ArrayIndexOutOfBoundsException. Вы можете избежать проблемы, если будете использовать метод getOrElse() с указанием значения по умолчанию, если выйдете за пределы допустимых значений. В этом случае вам не придётся обрабатывать исключение.
+//
+//
+//    val cats = listOf("Мурзик", "Барсик", "Рыжик")
+//    println(cats.getOrElse(4) { "Неизвестный котик" })
+//// или как вариант, имя первого кота
+//    println(cats.getOrElse(4) { cats.first() })
+    //#######################
+
 }
+
+
+
 
 
 
