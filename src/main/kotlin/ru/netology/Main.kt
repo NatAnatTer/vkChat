@@ -15,6 +15,9 @@ fun main() {
     obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
     obj.printDirectMessages()
     obj.printMessage()
+    println("@@@@@@@@@@@@@@@@@@@@@@@@")
+    obj.deleteDirectMessages(peopleOne, peopleTwo)
+    obj.printDirectMessages()
 
 //    val owner = authorization(persons)
 //    openDirectMessage(persons, owner)

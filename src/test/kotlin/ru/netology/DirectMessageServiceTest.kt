@@ -1,8 +1,10 @@
 package ru.netology
 
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import ru.netology.DirectMessageService.addDirectMessages
+import ru.netology.DirectMessageService.deleteDirectMessages
 import ru.netology.DirectMessageService.directMessages
 
 class DirectMessageServiceTest {
@@ -44,8 +46,23 @@ class DirectMessageServiceTest {
     }
 
     @Test
-    fun deleteDirectMessages() {
+    fun deleteDirectMessagesTest() {
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+        addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+        val result = deleteDirectMessages(peopleOne, peopleTwo)
+        assertTrue(result)
     }
+    @Test
+    fun deleteDirectMessagesTestFalse() {
+        directMessages.isEmpty()
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+       // addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+        val result = deleteDirectMessages(peopleOne, peopleTwo)
+        assertTrue(result)
+    }
+
 
     @Test
     fun getDirectMessages() {

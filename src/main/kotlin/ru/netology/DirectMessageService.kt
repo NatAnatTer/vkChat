@@ -71,13 +71,15 @@ object DirectMessageService {
     }
 
 
-    fun deleteDirectMessages(owner: People, targetPeople: People) {
+    fun deleteDirectMessages(owner: People, targetPeople: People): Boolean {
         val deletedChat = findChatInDirectMessages(owner, targetPeople, false)
         if (deletedChat != null) {
-            deletedChat.isDelete = true
-          //  deletedChat.message?.forEach { deletedChat.message.forEach { _ -> it.isDelete = true } }
+            true.also { deletedChat.isDelete = it }
+            deletedChat.message?.forEach { deletedChat.message!!.forEach { _ -> it.isDelete = true } }
             println("Чат удален")
+            return true
         }
+        return false
     }
 
 //    fun getDirectMessages(owner: People): List<DirectMessage>? {
