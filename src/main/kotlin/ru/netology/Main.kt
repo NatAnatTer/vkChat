@@ -7,12 +7,12 @@ fun main() {
     val peopleFour = People(4U, "Arkadiy", "Аркадий")
     val persons: MutableSet<People> = mutableSetOf(peopleOne, peopleTwo, peopleThree, peopleFour)
     val obj = DirectMessageService
-   println( obj.addDirectMessages(peopleOne, peopleTwo, "Hello. First message"))
-   println( obj.addDirectMessages(peopleOne,peopleThree, "Hola!!!!"))
-//    obj.addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
-//    obj.addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
-//    obj.addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
-//    obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
+   obj.addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+    obj.addDirectMessages(peopleOne,peopleThree, "Hola!!!!")
+    obj.addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
+    obj.addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
+    obj.addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
+    obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
     obj.printDirectMessages()
     obj.printMessage()
 

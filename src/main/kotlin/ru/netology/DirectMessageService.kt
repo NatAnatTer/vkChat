@@ -1,34 +1,30 @@
 package ru.netology
 
 object DirectMessageService {
-    private val directMessages = mutableListOf<DirectMessage>()
+    val directMessages = mutableListOf<DirectMessage>()
 
+    //######################################
     fun printDirectMessages() {
         directMessages.forEach { println(it) }
     }
-    fun printMessage(){
-        for(chat in directMessages){
+
+    fun printMessage() {
+        for (chat in directMessages) {
             println(chat.idChat)
             chat.message?.forEach { println(it) }
         }
     }
-    //        directMessages.stream()
-//            .filter{ directMessages->directMessages.idChat == idChat && !directMessages.isDelete}
-//            .peek{ directMessages->directMessages.isDelete=true}
-//            .peek( directMessages-> )
-//            .collect{Collectors.toList<>()};
+    //##################################
 
     fun addDirectMessages(owner: People, targetPeople: People, text: String): Boolean {
 
         if (findChatInDirectMessages(owner, targetPeople, false) != null) {
             findChatInDirectMessages(owner, targetPeople, false)?.let { createMessage(text, it, targetPeople) }
-          //  findChatInDirectMessages(owner, targetPeople, false)?.let { editDirectMessages(it) }
             println("Чат открыт")
             return true
         } else if (findChatInDirectMessages(owner, targetPeople, true) != null) {
             findChatInDirectMessages(owner, targetPeople, true)?.isDelete = false
             findChatInDirectMessages(owner, targetPeople, true)?.let { createMessage(text, it, targetPeople) }
-           // findChatInDirectMessages(owner, targetPeople, true)?.let { editDirectMessages(it) }
             println("Чат открыт")
             return true
         } else {
@@ -40,7 +36,6 @@ object DirectMessageService {
             return true
         }
     }
-
 
     private fun findChatInDirectMessages(owner: People, targetPeople: People, isDelete: Boolean): DirectMessage? {
         return if (!isDelete) {
@@ -58,15 +53,6 @@ object DirectMessageService {
         }
     }
 
-    private fun editDirectMessages(directMessage: DirectMessage) {
-        for ((index) in directMessages.withIndex()) {
-            if (directMessages[index].idChat == directMessage.idChat) {
-                directMessages[index] = directMessage.copy(
-                )
-            }
-        }
-    }
-
     private fun createMessage(text: String, directMessage: DirectMessage, targetPeople: People) {
         val idMessage = (directMessage.message?.lastOrNull()?.idMessage ?: 0U) + 1U
         val message = Message(
@@ -77,15 +63,11 @@ object DirectMessageService {
             isDelete = false,
             targetPeopleIsRead = false,
         )
-        println(message)
-        for(chat in directMessages){
-            if (chat == directMessage){
-                println("ok")
-                chat.message?.plusAssign(message)
-                println(chat.message)
-            }
-        }
 
+        directMessages.asSequence()
+            .filter { it == directMessage }
+            .onEach { it.message = ((it.message?.plus(message) ?: mutableListOf(message)) as MutableList<Message>?) }
+            .count()
     }
 
 
@@ -93,91 +75,91 @@ object DirectMessageService {
         val deletedChat = findChatInDirectMessages(owner, targetPeople, false)
         if (deletedChat != null) {
             deletedChat.isDelete = true
-            deletedChat.message?.forEach { deletedChat.message.forEach { _ -> it.isDelete = true } }
+          //  deletedChat.message?.forEach { deletedChat.message.forEach { _ -> it.isDelete = true } }
             println("Чат удален")
         }
     }
 
-    fun getDirectMessages(owner: People): List<DirectMessage>? {
-        val resultChats = directMessages.filter { it.user1 == owner || it.user2 == owner }
-        if (resultChats == null) {
-            println("нет сообщений")
-        }
-        return resultChats
-    }
+//    fun getDirectMessages(owner: People): List<DirectMessage>? {
+//        val resultChats = directMessages.filter { it.user1 == owner || it.user2 == owner }
+//        if (resultChats == null) {
+//            println("нет сообщений")
+//        }
+//        return resultChats
+//    }
 
 
-    fun getUnreadChatsCount(owner: People): Int {
-        return directMessages.count { directMessage ->
-            directMessage
-                .message?.none { message -> message.targetPeople == owner && !message.targetPeopleIsRead }
-                ?: false
-        }
+//    fun getUnreadChatsCount(owner: People): Int {
+//        return directMessages.count { directMessage ->
+//            directMessage
+//                .message?.none { message -> message.targetPeople == owner && !message.targetPeopleIsRead }
+//                ?: false
+//        }
+//
+//    }
 
-    }
+//    fun editMessage(owner: People, targetPeople: People, editedMessage: Message): Boolean {
+//        val editedChat = findChatInDirectMessages(owner, targetPeople, false)
+//        if (editedChat != null) {
+//            for ((index) in editedChat.message?.withIndex()!!) {
+////                if (editedChat.message[index].idMessage == editedMessage.idMessage) {
+////                    editedChat.message[index] = editedMessage.copy(
+////                        dateCreate = editedChat.message[index].dateCreate
+//                    )
+//                    editDirectMessages(editedChat)
+//                    return true
+//                }
+//            }
+//        }
+//
+//        return false
+//    }
 
-    fun editMessage(owner: People, targetPeople: People, editedMessage: Message): Boolean {
-        val editedChat = findChatInDirectMessages(owner, targetPeople, false)
-        if (editedChat != null) {
-            for ((index) in editedChat.message?.withIndex()!!) {
-                if (editedChat.message[index].idMessage == editedMessage.idMessage) {
-                    editedChat.message[index] = editedMessage.copy(
-                        dateCreate = editedChat.message[index].dateCreate
-                    )
-                    editDirectMessages(editedChat)
-                    return true
-                }
-            }
-        }
+    //  fun deleteMessage(owner: People, targetPeople: People, deletedMessage: Message): Boolean {
+//        val editedChat = findChatInDirectMessages(owner, targetPeople, false)
+//        if (editedChat != null) {
+//            for (message in editedChat.message!!) {
+//                if (message.idMessage == deletedMessage.idMessage && !message.isDelete) {
+//                    message.isDelete = true
+//                    if (editedChat.message.count() == 1) {
+//                        editedChat.isDelete = true
+//                    }
+//                    editDirectMessages(editedChat)
+//                    return true
+//                }
+//            }
+//        }
+//        return false
+//    }
 
-        return false
-    }
-
-    fun deleteMessage(owner: People, targetPeople: People, deletedMessage: Message): Boolean {
-        val editedChat = findChatInDirectMessages(owner, targetPeople, false)
-        if (editedChat != null) {
-            for (message in editedChat.message!!) {
-                if (message.idMessage == deletedMessage.idMessage && !message.isDelete) {
-                    message.isDelete = true
-                    if (editedChat.message.count() == 1) {
-                        editedChat.isDelete = true
-                    }
-                    editDirectMessages(editedChat)
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    fun getMessages(
-        idChat: UInt,
-        idMessageStart: UInt,
-        numberOfMessages: Int,
-        owner: People
-    ): MutableList<Message> {
-        val resultList = mutableListOf<Message>()
+//    fun getMessages(
+//        idChat: UInt,
+//        idMessageStart: UInt,
+//        numberOfMessages: Int,
+//        owner: People
+//    ): MutableList<Message> {
+//        val resultList = mutableListOf<Message>()
 //        directMessages.stream()
 //            .filter{ directMessages->directMessages.idChat == idChat && !directMessages.isDelete}
 //            .peek{ directMessages->directMessages.isDelete=true}
 //            .peek( directMessages-> )
 //            .collect{Collectors.toList<>()};
 
-        val resultChat = directMessages.find { it.idChat == idChat && !it.isDelete }
-        var numberMessage = numberOfMessages
-        if (resultChat != null) {
-            for (message in resultChat.message!!) {
-                if (message.idMessage >= idMessageStart && !message.isDelete && numberMessage > 0) {
-                    if (message.targetPeople == owner) {
-                        message.targetPeopleIsRead = true
-                    }
-                    resultList.add(message)
-                    numberMessage -= 1
-                }
-            }
-        }
-        return resultList
-    }
+//        val resultChat = directMessages.find { it.idChat == idChat && !it.isDelete }
+//        var numberMessage = numberOfMessages
+//        if (resultChat != null) {
+//            for (message in resultChat.message!!) {
+//                if (message.idMessage >= idMessageStart && !message.isDelete && numberMessage > 0) {
+//                    if (message.targetPeople == owner) {
+//                        message.targetPeopleIsRead = true
+//                    }
+//                    resultList.add(message)
+//                    numberMessage -= 1
+//                }
+//            }
+//        }
+//        return resultList
+//    }
 }
 
 //    val cats = listOf("Мурзик", "Барсик", "Рыжик")
@@ -257,7 +239,21 @@ object DirectMessageService {
 //    }
 
 
+//        directMessages.stream()
+//            .filter{ directMessages->directMessages.idChat == idChat && !directMessages.isDelete}
+//            .peek{ directMessages->directMessages.isDelete=true}
+//            .peek( directMessages-> )
+//            .collect{Collectors.toList<>()};
 
+
+// private fun editDirectMessages(directMessage: DirectMessage) {
+//        for ((index) in directMessages.withIndex()) {
+//            if (directMessages[index].idChat == directMessage.idChat) {
+//                directMessages[index] = directMessage.copy(
+//                )
+//            }
+//        }
+//    }
 
 
 
