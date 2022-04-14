@@ -7,39 +7,46 @@ fun main() {
     val peopleFour = People(4U, "Arkadiy", "Аркадий")
     val persons: MutableSet<People> = mutableSetOf(peopleOne, peopleTwo, peopleThree, peopleFour)
     val obj = DirectMessageService
+   println( obj.addDirectMessages(peopleOne, peopleTwo, "Hello. First message"))
+   println( obj.addDirectMessages(peopleOne,peopleThree, "Hola!!!!"))
+//    obj.addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
+//    obj.addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
+//    obj.addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
+//    obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
+    obj.printDirectMessages()
+    obj.printMessage()
 
-
-    val owner = authorization(persons)
-    openDirectMessage(persons, owner)
+//    val owner = authorization(persons)
+//    openDirectMessage(persons, owner)
 
 }
-
-fun authorization(persons: MutableSet<People>): People {
-    while (true) {
-        print("Авторизация. Введите логин:")
-        val login = readLine()
-        for (user in persons) {
-            if (user.login == login) {
-                println("Добро пожаловать ${user.name}")
-                return user
-            }
-        }
-        println("Пользователь не найден, проверьте правильность ввода логина")
-        continue
-    }
-}
-
-fun openDirectMessage(persons: MutableSet<People>, owner: People) {
-    while (true) {
-        print("Введите имя собеседника:")
-        val companion = readLine()
-        for (user in persons) {
-            if (user.name == companion) {
-                //  DirectMessageService.addDirectMessages(owner, user)
-                return
-            }
-        }
-        println("Собеседник не найден, попробуйте снова")
-        continue
-    }
-}
+//
+//fun authorization(persons: MutableSet<People>): People {
+//    while (true) {
+//        print("Авторизация. Введите логин:")
+//        val login = readLine()
+//        for (user in persons) {
+//            if (user.login == login) {
+//                println("Добро пожаловать ${user.name}")
+//                return user
+//            }
+//        }
+//        println("Пользователь не найден, проверьте правильность ввода логина")
+//        continue
+//    }
+//}
+//
+//fun openDirectMessage(persons: MutableSet<People>, owner: People) {
+//    while (true) {
+//        print("Введите имя собеседника:")
+//        val companion = readLine()
+//        for (user in persons) {
+//            if (user.name == companion) {
+//                //  DirectMessageService.addDirectMessages(owner, user)
+//                return
+//            }
+//        }
+//        println("Собеседник не найден, попробуйте снова")
+//        continue
+//    }
+//}

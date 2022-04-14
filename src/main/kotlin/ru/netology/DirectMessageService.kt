@@ -3,17 +3,32 @@ package ru.netology
 object DirectMessageService {
     private val directMessages = mutableListOf<DirectMessage>()
 
+    fun printDirectMessages() {
+        directMessages.forEach { println(it) }
+    }
+    fun printMessage(){
+        for(chat in directMessages){
+            println(chat.idChat)
+            chat.message?.forEach { println(it) }
+        }
+    }
+    //        directMessages.stream()
+//            .filter{ directMessages->directMessages.idChat == idChat && !directMessages.isDelete}
+//            .peek{ directMessages->directMessages.isDelete=true}
+//            .peek( directMessages-> )
+//            .collect{Collectors.toList<>()};
+
     fun addDirectMessages(owner: People, targetPeople: People, text: String): Boolean {
 
         if (findChatInDirectMessages(owner, targetPeople, false) != null) {
             findChatInDirectMessages(owner, targetPeople, false)?.let { createMessage(text, it, targetPeople) }
-            findChatInDirectMessages(owner, targetPeople, false)?.let { editDirectMessages(it) }
+          //  findChatInDirectMessages(owner, targetPeople, false)?.let { editDirectMessages(it) }
             println("Чат открыт")
             return true
         } else if (findChatInDirectMessages(owner, targetPeople, true) != null) {
             findChatInDirectMessages(owner, targetPeople, true)?.isDelete = false
             findChatInDirectMessages(owner, targetPeople, true)?.let { createMessage(text, it, targetPeople) }
-            findChatInDirectMessages(owner, targetPeople, true)?.let { editDirectMessages(it) }
+           // findChatInDirectMessages(owner, targetPeople, true)?.let { editDirectMessages(it) }
             println("Чат открыт")
             return true
         } else {
@@ -26,14 +41,6 @@ object DirectMessageService {
         }
     }
 
-    fun printDirectMessages() {
-        directMessages.forEach { println(it) }
-    }
-    //        directMessages.stream()
-//            .filter{ directMessages->directMessages.idChat == idChat && !directMessages.isDelete}
-//            .peek{ directMessages->directMessages.isDelete=true}
-//            .peek( directMessages-> )
-//            .collect{Collectors.toList<>()};
 
     private fun findChatInDirectMessages(owner: People, targetPeople: People, isDelete: Boolean): DirectMessage? {
         return if (!isDelete) {
@@ -57,7 +64,6 @@ object DirectMessageService {
                 directMessages[index] = directMessage.copy(
                 )
             }
-
         }
     }
 
@@ -71,7 +77,15 @@ object DirectMessageService {
             isDelete = false,
             targetPeopleIsRead = false,
         )
-        directMessage.message?.add(message)
+        println(message)
+        for(chat in directMessages){
+            if (chat == directMessage){
+                println("ok")
+                chat.message?.plusAssign(message)
+                println(chat.message)
+            }
+        }
+
     }
 
 
