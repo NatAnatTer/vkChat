@@ -6,6 +6,8 @@ fun main() {
     val peopleThree = People(3U, "Vika", "Виктория")
     val peopleFour = People(4U, "Arkadiy", "Аркадий")
     val persons: MutableSet<People> = mutableSetOf(peopleOne, peopleTwo, peopleThree, peopleFour)
+    val obj = DirectMessageService
+
 
     val owner = authorization(persons)
     openDirectMessage(persons, owner)
@@ -33,7 +35,7 @@ fun openDirectMessage(persons: MutableSet<People>, owner: People) {
         val companion = readLine()
         for (user in persons) {
             if (user.name == companion) {
-              //  DirectMessageService.addDirectMessages(owner, user)
+                //  DirectMessageService.addDirectMessages(owner, user)
                 return
             }
         }
