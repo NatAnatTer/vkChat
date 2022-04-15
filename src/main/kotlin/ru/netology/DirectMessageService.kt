@@ -1,5 +1,6 @@
 package ru.netology
 
+
 object DirectMessageService {
     val directMessages = mutableListOf<DirectMessage>()
 
@@ -98,26 +99,47 @@ object DirectMessageService {
         }
     }
 
-    fun editMessage(owner: People, targetPeople: People, editedMessage: Message): Boolean {
+    fun editMessage(owner: People, targetPeople: People, idMessage: UInt, text: String): Boolean {
+
         directMessages.asSequence()
-            .filter { it.message == editedMessage }
-            .onEach { it.message = ((it.message?.plus(message) ?: mutableListOf(message)) as MutableList<Message>?) }
+            .filter {
+                (it.user1 == owner && it.user2 == targetPeople && !it.isDelete) ||
+                        (it.user2 == owner && it.user1 == targetPeople && !it.isDelete)
+            }
+            .onEach { it ->
+                it.message?.asSequence()
+                    ?.filter { message -> message.idMessage == idMessage }
+                    ?.onEach { message -> message.text = text }
+                    ?.count()
+            }
+            .count()
+        return true
+    }
+
+    fun deleteMessage(owner: People, targetPeople: People, idMessage: UInt): Boolean {
+        directMessages.asSequence()
+            .filter {
+                (it.user1 == owner && it.user2 == targetPeople && !it.isDelete) ||
+                        (it.user2 == owner && it.user1 == targetPeople && !it.isDelete)
+            }
+            .onEach { it ->
+                it.message?.asSequence()
+                    ?.filter { message -> message.idMessage == idMessage }
+                    ?.onEach { message -> message.isDelete = true }
+                    ?.count()
+            }
             .count()
 
-        val editedChat = findChatInDirectMessages(owner, targetPeople, false)
-        if (editedChat != null) {
-            for ((index) in editedChat.message?.withIndex()!!) {
-                if (editedChat.message[index].idMessage == editedMessage.idMessage) {
-                    editedChat.message[index] = editedMessage.copy(
-                        dateCreate = editedChat.message[index].dateCreate
-                    )
-                    editDirectMessages(editedChat)
-                    return true
-                }
+        directMessages
+            .filter {
+                (it.user1 == owner && it.user2 == targetPeople && !it.isDelete) ||
+                        (it.user2 == owner && it.user1 == targetPeople && !it.isDelete)
             }
-        }
+            .filter { (it.message?.count { message -> !message.isDelete } ?: 0) == 0 }
+            .forEach { it.isDelete = true }
 
-        return false
+
+        return true
     }
 
     //  fun deleteMessage(owner: People, targetPeople: People, deletedMessage: Message): Boolean {
