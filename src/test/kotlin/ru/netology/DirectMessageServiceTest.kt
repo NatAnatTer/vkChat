@@ -1,11 +1,12 @@
 package ru.netology
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import ru.netology.DirectMessageService.addDirectMessages
 import ru.netology.DirectMessageService.deleteDirectMessages
 import ru.netology.DirectMessageService.directMessages
+import ru.netology.DirectMessageService.getDirectMessages
+import ru.netology.DirectMessageService.getUnreadChatsCount
 
 class DirectMessageServiceTest {
 
@@ -55,21 +56,47 @@ class DirectMessageServiceTest {
     }
     @Test
     fun deleteDirectMessagesTestFalse() {
-        directMessages.isEmpty()
+        directMessages.clear()
         val peopleOne = People(1U, "Nata", "Наталья")
         val peopleTwo = People(2U, "Artem", "Артем")
-       // addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
         val result = deleteDirectMessages(peopleOne, peopleTwo)
-        assertTrue(result)
+        assertFalse(result)
     }
 
 
     @Test
-    fun getDirectMessages() {
+    fun getDirectMessagesTest() {
+        directMessages.clear()
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+         addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+
+        val result = getDirectMessages(peopleOne)
+        assertEquals(directMessages, result)
     }
 
     @Test
-    fun getUnreadChatsCount() {
+    fun getDirectMessagesTestIsEmpty() {
+        directMessages.clear()
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+        val peopleThree = People(3U, "Vika", "Виктория")
+        addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+        val result = getDirectMessages(peopleThree)
+        directMessages.clear()
+        assertEquals(directMessages, result)
+    }
+
+    @Test
+    fun getUnreadChatsCountTest() {
+        directMessages.clear()
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+        val peopleThree = People(3U, "Vika", "Виктория")
+        addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+        addDirectMessages(peopleThree, peopleTwo, "Hello. First message")
+        val result = getUnreadChatsCount(peopleTwo)
+        assertEquals(2, result)
     }
 
     @Test

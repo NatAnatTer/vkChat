@@ -10,14 +10,21 @@ fun main() {
    obj.addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
     obj.addDirectMessages(peopleOne,peopleThree, "Hola!!!!")
     obj.addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
+    obj.addDirectMessages(peopleThree, peopleOne, "Hi. Second message")
+    obj.addDirectMessages(peopleFour, peopleOne, "Hi. Second message")
     obj.addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
     obj.addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
     obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
-    obj.printDirectMessages()
-    obj.printMessage()
-    println("@@@@@@@@@@@@@@@@@@@@@@@@")
-    obj.deleteDirectMessages(peopleOne, peopleTwo)
-    obj.printDirectMessages()
+//    obj.printDirectMessages()
+//    obj.printMessage()
+//    println("@@@@@@@@@@@@@@@@@@@@@@@@")
+//    obj.deleteDirectMessages(peopleOne, peopleTwo)
+//    obj.printDirectMessages()
+//   println( obj.getDirectMessages(peopleOne))
+   println( obj.getUnreadChatsCount(peopleOne))
+
+
+
 
 //    val owner = authorization(persons)
 //    openDirectMessage(persons, owner)
