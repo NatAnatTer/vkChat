@@ -8,13 +8,6 @@ object DirectMessageService {
     fun printDirectMessages() {
         directMessages.forEach { println(it) }
     }
-
-    fun printMessage() {
-        for (chat in directMessages) {
-            println(chat.idChat)
-            chat.message?.forEach { println(it) }
-        }
-    }
     //##################################
 
     fun addDirectMessages(owner: People, targetPeople: People, text: String): Boolean {
@@ -106,7 +99,7 @@ object DirectMessageService {
                 (it.user1 == owner && it.user2 == targetPeople && !it.isDelete) ||
                         (it.user2 == owner && it.user1 == targetPeople && !it.isDelete)
             }
-            .onEach { it ->
+            .onEach {
                 it.message?.asSequence()
                     ?.filter { message -> message.idMessage == idMessage }
                     ?.onEach { message -> message.text = text }
@@ -122,7 +115,7 @@ object DirectMessageService {
                 (it.user1 == owner && it.user2 == targetPeople && !it.isDelete) ||
                         (it.user2 == owner && it.user1 == targetPeople && !it.isDelete)
             }
-            .onEach { it ->
+            .onEach {
                 it.message?.asSequence()
                     ?.filter { message -> message.idMessage == idMessage }
                     ?.onEach { message -> message.isDelete = true }
@@ -148,17 +141,17 @@ object DirectMessageService {
         owner: People
     ): MutableList<Message> {
 
-        val resultList1 = mutableListOf<Message>()
-        val resultChat1 = directMessages.find { it.idChat == idChat && !it.isDelete }
-        resultChat1?.message?.listIterator()
-        resultChat1?.message?.filter { it.idMessage >= idMessageStart && !it.isDelete }
-        resultChat1?.message?.filterIndexedTo(resultList1) { index, _ -> index <= numberOfMessages }
+        val resultList = mutableListOf<Message>()
+        val resultChat = directMessages.find { it.idChat == idChat && !it.isDelete }
+        resultChat?.message?.filter { it.idMessage >= idMessageStart && !it.isDelete }
+        ?.filterIndexedTo(resultList) { index, _ -> index <= (numberOfMessages-1) }
 
-        resultList1
+        resultList
             .filter { it.targetPeople == owner }
             .forEach { it.targetPeopleIsRead = true }
 
-        return resultList1
+        return resultList
+
     }
 }
 

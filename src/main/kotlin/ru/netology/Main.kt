@@ -25,9 +25,10 @@ fun main() {
   //  val editedMessage = Message(1U, peopleTwo, "EDITED TEXT", 1650023223661, false, true)
 //obj.editMessage(peopleOne, peopleTwo, 1U, "EDITED TEXT")
 //    obj.deleteMessage(peopleOne, peopleTwo, 1U)
-//    println("@@@@@@@@@@@@@@@@@@@@@@@@")
+
+   println("@@@@@@@@@@@@@@@@@@@@@@@@")
 //    obj.printDirectMessages()
-obj.getMessages(1U, 1U, 2, peopleTwo)
+print(obj.getMessages(1U, 2U, 2, peopleTwo))
 
 
 
