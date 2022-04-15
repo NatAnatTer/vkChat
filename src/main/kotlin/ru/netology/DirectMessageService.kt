@@ -144,7 +144,7 @@ object DirectMessageService {
         val resultList = mutableListOf<Message>()
         val resultChat = directMessages.find { it.idChat == idChat && !it.isDelete }
         resultChat?.message?.filter { it.idMessage >= idMessageStart && !it.isDelete }
-        ?.filterIndexedTo(resultList) { index, _ -> index <= (numberOfMessages-1) }
+            ?.filterIndexedTo(resultList) { index, _ -> index <= (numberOfMessages - 1) }
 
         resultList
             .filter { it.targetPeople == owner }

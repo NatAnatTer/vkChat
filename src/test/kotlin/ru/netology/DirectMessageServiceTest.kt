@@ -204,7 +204,7 @@ class DirectMessageServiceTest {
         addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
         addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
         addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
-                val result = getMessages(1U, 2U, 4, peopleOne)
+        val result = getMessages(1U, 2U, 4, peopleOne)
         val messages = mutableListOf<Message>()
         for (chat in directMessages) {
             for (message in chat.message!!) {
