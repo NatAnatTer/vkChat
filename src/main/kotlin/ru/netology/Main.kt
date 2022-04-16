@@ -32,7 +32,7 @@ fun main() {
 
 
     val owner = authorization(persons)
-    openDirectMessage(persons, owner)
+  //  openDirectMessage(persons, owner)
 
 
 }
@@ -87,15 +87,20 @@ fun selectCommand(owner: People, persons: MutableSet<People>) {
                 userChoiseCountMessage("Введите количество сообщений"),
                 owner
             )
-            4U -> DirectMessageService.addDirectMessages(owner, getTargetPeople("Введите имя собеседника", persons), getTargetPeople("Введите текст сообщения"))
-                5U
-            ->
-                6U
-            ->
-                7U
-            ->
-                8U
-            -> return
+            4U -> getTextMessage("Введите текст сообщения")?.let {
+                DirectMessageService.addDirectMessages(
+                    owner, getTargetPeople("Введите имя собеседника", persons),
+                    it
+                )
+            }
+            5U -> getTextMessage("Введите текст сообщения")?.let {
+                DirectMessageService.editMessage(owner, getTargetPeople("Введите имя собеседника", persons),userChoiseIdMessage("Введите ID сообщения"),
+                    it
+                )
+            }
+                6U -> DirectMessageService.deleteMessage(owner, getTargetPeople("Введите имя собеседника", persons), userChoiseIdMessage("Введите ID сообщения"),
+                7U -> DirectMessageService.deleteDirectMessages(owner, getTargetPeople("Введите имя собеседника", persons)),
+                8U-> return
         }
 
     }
@@ -114,6 +119,21 @@ fun userChoiseMessageChat(text: String): UInt {
         return userCommandChoice
     }
 }
+
+fun userChoiseIdMessage(text: String): UInt {
+    while (true) {
+        println(text)
+        val userCommandChoice: UInt
+        try {
+            userCommandChoice = readLine()?.toUInt() ?: return 0U
+        } catch (e: Exception) {
+            println("Введена не допустимая команда")
+            continue
+        }
+        return userCommandChoice
+    }
+}
+
 fun userChoiseCountMessage(text: String): Int {
     while (true) {
         println(text)
@@ -127,7 +147,8 @@ fun userChoiseCountMessage(text: String): Int {
         return userCommandChoice
     }
 }
-fun getTargetPeople(text: String, persons: MutableSet<People>): People{
+
+fun getTargetPeople(text: String, persons: MutableSet<People>): People {
     while (true) {
         print(text)
         val name = readLine()
@@ -140,23 +161,23 @@ fun getTargetPeople(text: String, persons: MutableSet<People>): People{
         continue
     }
 }
-fun getTargetPeople(text: String): String? {
+
+fun getTextMessage(text: String): String? {
     print(text)
     return readLine()
-
 }
 
-fun openDirectMessage(persons: MutableSet<People>, owner: People) {
-    while (true) {
-        print("Введите имя собеседника:")
-        val companion = readLine()
-        for (user in persons) {
-            if (user.name == companion) {
-                //  DirectMessageService.addDirectMessages(owner, user)
-                return
-            }
-        }
-        println("Собеседник не найден, попробуйте снова")
-        continue
-    }
-}
+//fun openDirectMessage(persons: MutableSet<People>, owner: People) {
+//    while (true) {
+//        print("Введите имя собеседника:")
+//        val companion = readLine()
+//        for (user in persons) {
+//            if (user.name == companion) {
+//                //  DirectMessageService.addDirectMessages(owner, user)
+//                return
+//            }
+//        }
+//        println("Собеседник не найден, попробуйте снова")
+//        continue
+//    }
+//}
