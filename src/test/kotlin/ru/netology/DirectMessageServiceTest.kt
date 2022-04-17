@@ -42,9 +42,22 @@ class DirectMessageServiceTest {
 
     @Test
     fun addDirectMessagesTestIsDeleted() {
+        directMessages.clear()
         val peopleOne = People(1U, "Nata", "Наталья")
         val peopleTwo = People(2U, "Artem", "Артем")
         addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
+        for (chat in directMessages) {
+            chat.isDelete = true
+        }
+        val result = addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
+        assertTrue(result)
+    }
+    @Test
+    fun addDirectMessagesTestIsDeletedRevers() {
+        directMessages.clear()
+        val peopleOne = People(1U, "Nata", "Наталья")
+        val peopleTwo = People(2U, "Artem", "Артем")
+        addDirectMessages(peopleOne, peopleTwo, "Hi. Second message")
         for (chat in directMessages) {
             chat.isDelete = true
         }

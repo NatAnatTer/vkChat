@@ -4,12 +4,6 @@ package ru.netology
 object DirectMessageService {
     val directMessages = mutableListOf<DirectMessage>()
 
-    //######################################
-    fun printDirectMessages() {
-        directMessages.forEach { println(it) }
-    }
-    //##################################
-
     fun addDirectMessages(owner: People, targetPeople: People, text: String): Boolean {
 
         if (findChatInDirectMessages(owner, targetPeople, false) != null) {
@@ -57,7 +51,7 @@ object DirectMessageService {
             isDelete = false,
             targetPeopleIsRead = false,
         )
-
+        println(message)
         directMessages.asSequence()
             .filter { it == directMessage }
             .onEach { it.message = ((it.message?.plus(message) ?: mutableListOf(message)) as MutableList<Message>?) }
@@ -81,15 +75,23 @@ object DirectMessageService {
             directMessages.filter { (it.user1 == owner && !it.isDelete) || (it.user2 == owner && !it.isDelete) }
         if (resultChats.isEmpty()) {
             println("нет сообщений")
+        } else {
+            resultChats.forEach { println(it) }
         }
         return resultChats
     }
 
 
     fun getUnreadChatsCount(owner: People): Int {
-        return directMessages.count { directMessage ->
+        val countChat = directMessages.count { directMessage ->
             directMessage.message?.any { it -> it.targetPeople == owner && !it.targetPeopleIsRead } ?: false
         }
+        if (countChat == 0) {
+            println("Непрочитанных чатов нет")
+        } else {
+            println(countChat)
+        }
+        return countChat
     }
 
     fun editMessage(owner: People, targetPeople: People, idMessage: UInt, text: String): Boolean {
@@ -103,9 +105,11 @@ object DirectMessageService {
                 it.message?.asSequence()
                     ?.filter { message -> message.idMessage == idMessage }
                     ?.onEach { message -> message.text = text }
+                    ?.onEach { message -> println(message) }
                     ?.count()
             }
             .count()
+
         return true
     }
 
@@ -130,6 +134,7 @@ object DirectMessageService {
             }
             .filter { (it.message?.count { message -> !message.isDelete } ?: 0) == 0 }
             .forEach { it.isDelete = true }
+        println("Сообщение удалено")
         return true
     }
 
@@ -149,7 +154,11 @@ object DirectMessageService {
         resultList
             .filter { it.targetPeople == owner }
             .forEach { it.targetPeopleIsRead = true }
-
+        if (resultList.isEmpty()) {
+            println("Сообщений в чате нет")
+        } else {
+            resultList.forEach { println(it) }
+        }
         return resultList
 
     }

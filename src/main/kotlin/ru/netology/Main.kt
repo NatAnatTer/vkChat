@@ -2,39 +2,15 @@ package ru.netology
 
 fun main() {
     val peopleOne = People(1U, "Nata", "Наталья")
-    val peopleTwo = People(2U, "Artem", "Артем")
+    val peopleTwo = People(2U, "Artem", "Art")
     val peopleThree = People(3U, "Vika", "Виктория")
     val peopleFour = People(4U, "Arkadiy", "Аркадий")
     val persons: MutableSet<People> = mutableSetOf(peopleOne, peopleTwo, peopleThree, peopleFour)
-    val obj = DirectMessageService
-//   obj.addDirectMessages(peopleOne, peopleTwo, "Hello. First message")
-//    obj.addDirectMessages(peopleOne,peopleThree, "Hola!!!!")
-//    obj.addDirectMessages(peopleTwo, peopleOne, "Hi. Second message")
-//    obj.addDirectMessages(peopleThree, peopleOne, "Hi. Second message")
-//    obj.addDirectMessages(peopleFour, peopleOne, "Hi. Second message")
-//    obj.addDirectMessages(peopleOne, peopleTwo, "How do you do?. Three message")
-//    obj.addDirectMessages(peopleTwo, peopleOne, "I am fine, thanks. And you?. First message")
-//    obj.addDirectMessages(peopleOne, peopleTwo, "Me too. First message")
-//    obj.printDirectMessages()
-//    obj.printMessage()
-//    println("@@@@@@@@@@@@@@@@@@@@@@@@")
-//    obj.deleteDirectMessages(peopleOne, peopleTwo)
-//    obj.printDirectMessages()
-//   println( obj.getDirectMessages(peopleOne))
-    // println( obj.getUnreadChatsCount(peopleOne))
-    //  val editedMessage = Message(1U, peopleTwo, "EDITED TEXT", 1650023223661, false, true)
-//obj.editMessage(peopleOne, peopleTwo, 1U, "EDITED TEXT")
-//    obj.deleteMessage(peopleOne, peopleTwo, 1U)
+    while (true) {
+        val owner = authorization(persons)
+        selectCommand(owner, persons)
 
-//   println("@@@@@@@@@@@@@@@@@@@@@@@@")
-//    obj.printDirectMessages()
-//print(obj.getMessages(1U, 2U, 2, peopleTwo))
-
-
-    val owner = authorization(persons)
-  //  openDirectMessage(persons, owner)
-
-
+    }
 }
 
 fun authorization(persons: MutableSet<People>): People {
@@ -82,29 +58,37 @@ fun selectCommand(owner: People, persons: MutableSet<People>) {
             1U -> DirectMessageService.getUnreadChatsCount(owner)
             2U -> DirectMessageService.getDirectMessages(owner)
             3U -> DirectMessageService.getMessages(
-                userChoiseMessageChat("Введите ID чата"),
-                userChoiseMessageChat("Введите ID сообщения"),
-                userChoiseCountMessage("Введите количество сообщений"),
+                userChoiseMessageChat("Введите ID чата:"),
+                userChoiseMessageChat("Введите ID сообщения:"),
+                userChoiseCountMessage("Введите количество сообщений:"),
                 owner
             )
-            4U -> getTextMessage("Введите текст сообщения")?.let {
+            4U -> getTextMessage("Введите текст сообщения:")?.let {
                 DirectMessageService.addDirectMessages(
-                    owner, getTargetPeople("Введите имя собеседника", persons),
+                    owner, getTargetPeople("Введите имя собеседника:", persons),
                     it
                 )
             }
-            5U -> getTextMessage("Введите текст сообщения")?.let {
-                DirectMessageService.editMessage(owner, getTargetPeople("Введите имя собеседника", persons),userChoiseIdMessage("Введите ID сообщения"),
+            5U -> getTextMessage("Введите текст сообщения:")?.let {
+                DirectMessageService.editMessage(
+                    owner,
+                    getTargetPeople("Введите имя собеседника:", persons),
+                    userChoiseIdMessage("Введите ID сообщения"),
                     it
                 )
             }
-                6U -> DirectMessageService.deleteMessage(owner, getTargetPeople("Введите имя собеседника", persons), userChoiseIdMessage("Введите ID сообщения"),
-                7U -> DirectMessageService.deleteDirectMessages(owner, getTargetPeople("Введите имя собеседника", persons)),
-                8U-> return
+            6U -> DirectMessageService.deleteMessage(
+                owner,
+                getTargetPeople("Введите имя собеседника:", persons),
+                userChoiseIdMessage("Введите ID сообщения")
+            )
+            7U -> DirectMessageService.deleteDirectMessages(owner, getTargetPeople("Введите имя собеседника:", persons))
+            8U -> return
         }
 
     }
 }
+
 
 fun userChoiseMessageChat(text: String): UInt {
     while (true) {
@@ -150,7 +134,7 @@ fun userChoiseCountMessage(text: String): Int {
 
 fun getTargetPeople(text: String, persons: MutableSet<People>): People {
     while (true) {
-        print(text)
+        println(text)
         val name = readLine()
         for (user in persons) {
             if (user.name == name) {
@@ -163,21 +147,6 @@ fun getTargetPeople(text: String, persons: MutableSet<People>): People {
 }
 
 fun getTextMessage(text: String): String? {
-    print(text)
+    println(text)
     return readLine()
 }
-
-//fun openDirectMessage(persons: MutableSet<People>, owner: People) {
-//    while (true) {
-//        print("Введите имя собеседника:")
-//        val companion = readLine()
-//        for (user in persons) {
-//            if (user.name == companion) {
-//                //  DirectMessageService.addDirectMessages(owner, user)
-//                return
-//            }
-//        }
-//        println("Собеседник не найден, попробуйте снова")
-//        continue
-//    }
-//}
