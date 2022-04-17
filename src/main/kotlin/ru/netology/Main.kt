@@ -12,7 +12,6 @@ fun main() {
 
     }
 }
-
 fun authorization(persons: MutableSet<People>): People {
     while (true) {
         print("Авторизация. Введите логин:")
@@ -27,7 +26,6 @@ fun authorization(persons: MutableSet<People>): People {
         continue
     }
 }
-
 fun selectCommand(owner: People, persons: MutableSet<People>) {
     while (true) {
         println(
@@ -88,8 +86,6 @@ fun selectCommand(owner: People, persons: MutableSet<People>) {
 
     }
 }
-
-
 fun userChoiseMessageChat(text: String): UInt {
     while (true) {
         println(text)
@@ -117,7 +113,6 @@ fun userChoiseIdMessage(text: String): UInt {
         return userCommandChoice
     }
 }
-
 fun userChoiseCountMessage(text: String): Int {
     while (true) {
         println(text)
@@ -131,7 +126,6 @@ fun userChoiseCountMessage(text: String): Int {
         return userCommandChoice
     }
 }
-
 fun getTargetPeople(text: String, persons: MutableSet<People>): People {
     while (true) {
         println(text)
@@ -145,7 +139,6 @@ fun getTargetPeople(text: String, persons: MutableSet<People>): People {
         continue
     }
 }
-
 fun getTextMessage(text: String): String? {
     println(text)
     return readLine()
