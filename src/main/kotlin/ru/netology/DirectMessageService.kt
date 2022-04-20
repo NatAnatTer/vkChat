@@ -52,10 +52,9 @@ object DirectMessageService {
             targetPeopleIsRead = false,
         )
         println(message)
-        directMessages.asSequence()
+        directMessages
             .filter { it == directMessage }
             .onEach { it.message = ((it.message?.plus(message) ?: mutableListOf(message)) as MutableList<Message>?) }
-            .count()
     }
 
 
@@ -71,13 +70,14 @@ object DirectMessageService {
     }
 
     fun getDirectMessages(owner: People): List<DirectMessage> {
-        val resultChats =
-            directMessages.filter { (it.user1 == owner && !it.isDelete) || (it.user2 == owner && !it.isDelete) }
-        if (resultChats.isEmpty()) {
-            println("нет сообщений")
-        } else {
-            resultChats.forEach { println(it) }
-        }
+        val emptyChat = "нет сообщений"
+        val resultChats: List<DirectMessage> = directMessages
+            .filter { (it.user1 == owner && !it.isDelete) || (it.user2 == owner && !it.isDelete) }
+            .onEach { println(it) }
+
+        resultChats
+            .ifEmpty { emptyChat }
+            .let { println(it) }
         return resultChats
     }
 
@@ -147,21 +147,23 @@ object DirectMessageService {
     ): MutableList<Message> {
 
         val resultList = mutableListOf<Message>()
-        val resultChat = directMessages.find { it.idChat == idChat && !it.isDelete }
+        val resultChat = directMessages
+            .find { it.idChat == idChat && !it.isDelete }
+
         resultChat?.message?.filter { it.idMessage >= idMessageStart && !it.isDelete }
-            ?.filterIndexedTo(resultList) { index, _ -> index <= (numberOfMessages - 1) }
+            ?.filterIndexedTo(resultList) { index, _ -> index <= (numberOfMessages - 1) }?: println("Сообщений в чате нет")
 
         resultList
             .filter { it.targetPeople == owner }
             .forEach { it.targetPeopleIsRead = true }
-        if (resultList.isEmpty()) {
-            println("Сообщений в чате нет")
-        } else {
-            resultList.forEach { println(it) }
-        }
+
+        resultList
+            .forEach { println(it) }
+
         return resultList
 
     }
+
 }
 
 
